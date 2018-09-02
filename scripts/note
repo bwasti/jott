@@ -1,0 +1,24 @@
+#!/bin/bash
+if [ -z "$1" ]
+then
+  echo "Error, please provide a note name"
+  exit 1
+fi
+
+if ! [ ! -t 0 ]; then
+  if [ "$1" = "-d" ]
+  then
+    if [ -z "$2" ]
+    then
+      echo "Error, please provide a note name"
+      exit 1
+    fi
+    curl https://jott.live/delete/note/$2/$3
+    exit
+  fi
+
+  curl https://jott.live/raw/note/$1
+  exit
+fi
+
+python -c 'import json,sys; print(json.dumps({"note":sys.stdin.read()}))' | curl -H "Content-Type: application/json" -d @- -X POST https://jott.live/save/note/$1/$2
