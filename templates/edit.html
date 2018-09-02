@@ -1,0 +1,125 @@
+<html>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+<head>
+<link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+
+<link href="https://fonts.googleapis.com/css?family=inconsolata:400,700&amp;subset=latin-ext" rel="stylesheet">
+
+<style>
+
+html, body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Inconsolata', monospace;
+}
+body {
+	position: relative;
+	height: 100%;
+}
+#name {
+	position: absolute;
+	height: 20px;
+	width: 85%;
+	left: 0;
+	margin: 0;
+	padding: 0;
+	padding-left: 5px;
+	border: none;
+	background: #eee;
+	font-family: 'Inconsolata', monospace;
+	font-weight: bold;
+}
+button {
+	position: absolute;
+	height: 20px;
+	width: 15%;
+	right: 0;
+	margin: 0;
+	padding: 0;
+	border: none;
+	background: #eee;
+	font-family: 'Inconsolata', monospace;
+	font-weight: bold;
+}
+button:hover{
+	background: #aaa;
+	cursor:pointer;
+}
+#note-container {
+	position: absolute;
+	top: 20px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin:0;
+	padding:5px;
+}
+#note {
+	height: 100%;
+	width: 100%;
+	margin:0;
+	padding:0;
+	border: none;
+	font-family: 'Inconsolata', monospace;
+}
+
+</style>
+
+<script>
+
+function save_note(textarea, input) {
+	let note = textarea.value;
+	let name_pass = input.value.split('#');
+	let name = encodeURIComponent(name_pass[0]);
+	if (name == '') {
+		alert("Note needs a name");
+		return;
+	}
+	let pass = '';
+	if (name_pass.length > 1) {
+		pass = encodeURIComponent(name_pass[1]);
+	}
+	let httpRequest = new XMLHttpRequest();
+	httpRequest.onreadystatechange = function(){
+		if (httpRequest.readyState == 4) {
+			if (httpRequest.status != 200) {
+				alert("Error: " + httpRequest.response);
+			} else {
+				var newurl = window.location.origin +
+					'/edit/note/' +
+					name;
+				window.history.pushState(
+					{ path: newurl }, 
+					'', 
+					newurl);
+			}
+		}
+	};
+	httpRequest.open('POST',
+		window.location.origin +
+		'/save/note/' +
+		name + '/' + pass,
+		true);
+	httpRequest.setRequestHeader('Content-Type', 'application/json');
+	httpRequest.send(JSON.stringify({
+		note: note})
+	);
+}
+
+</script>
+</head>
+
+<body>
+
+<input id="name" value="{{name}}" placeholder="name"/>
+<button onclick="save_note(
+	document.getElementById('note'),
+	document.getElementById('name')
+	)">save</button>
+<br>
+<div id="note-container">
+<textarea id="note" placeholder="note">{{ note }}</textarea>
+</div>
+
+</body>
+</html>

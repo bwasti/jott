@@ -1,0 +1,73 @@
+<html>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+<head>
+<link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+
+<link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin-ext" rel="stylesheet">
+
+<style>
+
+html, body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Inconsolata', monospace;
+}
+body {
+	padding: 5px;
+}
+#name {
+	width: 100%;
+	font-weight: bold;
+}
+pre {
+	font-family: 'Inconsolata', monospace;
+}
+</style>
+
+<script>
+
+// A series of rendering passes
+function render(elem) {
+	let contents = [elem.textContent];
+	let contents_copy;
+
+	// Pass to inject <br>s and convert strings to spans
+	contents_copy = contents;
+	contents = [];
+	for (let el of contents_copy) {
+		if (typeof el == "string") {
+			let arr = el.split('\n');
+			for (let s of arr) {
+				let span = document.createElement('span');
+				span.textContent = s;
+				contents.push(span);
+				contents.push(document.createElement('br'));
+			}
+		} else {
+			contents.push(el);
+		}
+	}
+
+	// Final pass to add to new_elem
+	let new_elem = document.createElement('div');
+	for (let el of contents) {
+		new_elem.appendChild(el);
+	}
+	elem.parentNode.replaceChild(new_elem, elem);
+}
+
+window.addEventListener('load', function() {
+	render(document.getElementById('note-container'));
+});
+
+</script>
+</head>
+
+<body>
+
+<h2 id="name">{{ name }}</h2>
+<pre id="note-container">{{ note }}</pre>
+
+</body>
+</html>
+
