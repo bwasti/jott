@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Singleton pattern (because threading)
 def get_db(name):
-    if app.config['DEBUG']:
+    if app.config["DEBUG"]:
         name = "{}_debug".format(name)
     db = getattr(g, "_database_{}".format(name), None)
     db_list = getattr(g, "_db_list", [])
@@ -73,8 +73,8 @@ def save_note(name, key=""):
 
     c.execute(
         """
-    SELECT count, date FROM ips WHERE ip=?
-    """,
+        SELECT count, date FROM ips WHERE ip=?
+        """,
         (ip,),
     )
     count_lookup = c.fetchone()
@@ -89,29 +89,29 @@ def save_note(name, key=""):
         count = 1
         c.execute(
             """
-        INSERT INTO ips VALUES (?, ?, ?)
-        """,
+            INSERT INTO ips VALUES (?, ?, ?)
+            """,
             (ip, count, date),
         )
 
     c.execute(
         """
-    UPDATE ips SET count=?, date=? WHERE ip=?
-    """,
+        UPDATE ips SET count=?, date=? WHERE ip=?
+        """,
         (count, date, ip),
     )
 
     c.execute(
         """
-    DELETE FROM notes WHERE name=?
-    """,
+        DELETE FROM notes WHERE name=?
+        """,
         (name,),
     )
 
     c.execute(
         """
-    INSERT INTO notes VALUES (?, ?, ?, ?, ?)
-    """,
+        INSERT INTO notes VALUES (?, ?, ?, ?, ?)
+        """,
         (name, note, key, ip, date),
     )
 
@@ -130,8 +130,8 @@ def delete_note(name, key=""):
         return "Incorrect key\n", 403
     c.execute(
         """
-    DELETE FROM notes WHERE name=?
-    """,
+        DELETE FROM notes WHERE name=?
+        """,
         (name,),
     )
     conn.commit()
@@ -181,18 +181,93 @@ def raw_note(name):
     return note
 
 
-app.run("0.0.0.0", port=8000 if app.config['DEBUG'] else 5000)
-with app.app_context():
+@app.before_request
+def track():
+    ip = get_ip()
+    path = request.full_path
+    if path[-1] == "?":
+        path = path[:-1]
+
+    conn = get_db("notes")
+    c = conn.cursor()
+    c.execute("SELECT count FROM visits WHERE ip=? AND path=?", (ip, path))
+    result = c.fetchone()
+    if result:
+        count = result[0] + 1
+    else:
+        count = 1
+        c.execute(
+            """
+            INSERT INTO visits VALUES (?, ?, ?)
+            """,
+            (ip, path, count),
+        )
+
+    c.execute(
+        """
+        UPDATE visits SET count=? WHERE ip=? AND path=?
+        """,
+        (count, ip, path),
+    )
+    conn.commit()
+
+
+@app.route("/stats")
+def stats():
+    conn = get_db("notes")
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM ips")
+    result = c.fetchone()
+    author_count = result[0] if result else 0
+
+    c.execute("SELECT COUNT(*) FROM notes")
+    result = c.fetchone()
+    note_count = result[0] if result else 0
+
+    c.execute("SELECT COUNT(DISTINCT ip) FROM visits")
+    result = c.fetchone()
+    visit_count = result[0] if result else 0
+
+    c.execute(
+        """
+        SELECT path, SUM(count) as sum 
+        FROM visits
+        GROUP BY path
+        ORDER BY sum DESC
+        """
+    )
+    top_paths = []
+
+    for i in range(5):
+        result = c.fetchone()
+        if result:
+            top_paths.append(result)
+    top_paths_str = "\n".join(
+        ["{}: {}".format(path, count) for path, count in top_paths]
+    )
+
+    return "{} visitors\n{} notes\n{} authors\n{}\n".format(
+        visit_count, note_count, author_count, top_paths_str
+    )
+
+
+@app.before_first_request
+def initialize_dbs():
     db = get_db("notes")
     db.execute(
         """
         CREATE TABLE IF NOT EXISTS notes (name text, note text, key text, author_ip text, date integer)
-    """
+        """
     )
     db.execute(
         """
         CREATE TABLE IF NOT EXISTS ips (ip text, count integer, date integer)
-    """
+        """
+    )
+    db.execute(
+        """
+        CREATE TABLE IF NOT EXISTS visits (ip text, path text, count integer)
+        """
     )
     db.commit()
 
@@ -203,3 +278,6 @@ def close_connection(exception):
     for db_name in db_list:
         db = get_db(db_name)
         db.close()
+
+
+app.run("0.0.0.0", port=8000 if app.config["DEBUG"] else 5000)
