@@ -146,6 +146,7 @@ def note(name):
     return render_template("render.html", name=name, note=note)
 
 
+@app.route("/texdown/<name>")
 @app.route("/texdown/note/<name>")
 def texdown_note(name):
     conn = get_db("notes")
@@ -156,6 +157,7 @@ def texdown_note(name):
     return render_template("texdown.html", name=name, note=note)
 
 
+@app.route("/code/<name>")
 @app.route("/code/note/<name>")
 def code_note(name):
     conn = get_db("notes")
@@ -166,6 +168,7 @@ def code_note(name):
     return render_template("code.html", name=name, note=note)
 
 
+@app.route("/raw/<name>")
 @app.route("/raw/note/<name>")
 def raw_note(name):
     conn = get_db("notes")
