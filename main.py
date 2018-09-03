@@ -6,6 +6,8 @@ app = Flask(__name__)
 
 # Singleton pattern (because threading)
 def get_db(name):
+    if app.config['DEBUG']:
+        name = "{}_debug".format(name)
     db = getattr(g, "_database_{}".format(name), None)
     db_list = getattr(g, "_db_list", [])
     if db is None:
@@ -179,7 +181,7 @@ def raw_note(name):
     return note
 
 
-app.run("0.0.0.0")
+app.run("0.0.0.0", port=8000 if app.config['DEBUG'] else 5000)
 with app.app_context():
     db = get_db("notes")
     db.execute(

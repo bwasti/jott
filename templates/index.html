@@ -29,8 +29,33 @@ img {
 	{{count}} notes made so far.
 	<br>
 	<br>
+	<h4> Command line usage </h4>
+	<code>
+	$ curl https://jott.live/raw/note/note_script > jott && chmod +x jott
+	<br>
+	$ echo "note contents" | jott &lt;name&gt; &lt;password&gt;
+	<br>
+	$ jott &lt;name&gt;
+	<br>
+	note contents
+	</code>
+	<br>
+	<br>
+	<h4> Web </h4>
+	Find a saved note at
+	<code>https://jott.live/note/&lt;name&gt;</code>
+	<br>
+	For code syntax highlighting
+	<code>https://jott.live/code/&lt;name&gt;</code>
+	<br>
+	For TeXdown rendering
+	<code>https://jott.live/texdown/&lt;name&gt;</code>
+	<br>
 	Source and documentation can be found <a href="https://github.com/bwasti/jott">here</a>.
-	Find your saved note at <code>https://jott.live/note/&lt;name&gt;</code>
+	<br>
+	<br>
+	<br>
+	<br>
 	<br>
 	<br>
 	<img src="/static/jott.png" alt="jott"> 
