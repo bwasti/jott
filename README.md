@@ -2,18 +2,6 @@
 A minimal tool for quickly writing and sharing notes.  Check out https://jott.live for a demo.
 ![jott](https://jott.live/static/jott.png)
 
-### Website
-
-Navigate to the site and set a title in the 'name' field.  To set a key for editing the note, use
-'name#key' in that field.
-
-- `/note/<note-name>` will return the default HTML rendering of the note.
-- `/raw/<note-name>` will return the note as raw text. (Useful with wget/curl.)
-- `/texdown/<note-name>` will return a minimal [TeXDown](https://github.com/tex-ninja/texdown#texdown) rendering of the note. [Example](https://jott.live/texdown/note/test)
-- `/code/<note-name>` will syntax highlight the note.
-- `/edit/note/<note-name>` will open a basic editor for the note.
-
-
 ### Command line
 
 The `jott` script in `jott/scripts` makes it easy to upload and read notes from the command line.
@@ -38,6 +26,18 @@ Delete a note with `jott -d [note name] [password]`
 $ jott -d my_test_note secret_password
 Success! Note "my_test_note" deleted
 ```
+
+### Website
+
+Navigate to the site and set a title in the 'name' field.  To set a key for editing the note, use
+'name#key' in that field.
+
+- `/note/<note-name>` will return the default HTML rendering of the note.
+- `/raw/<note-name>` will return the note as raw text. (Useful with wget/curl.)
+- `/texdown/<note-name>` will return a minimal [TeXDown](https://github.com/tex-ninja/texdown#texdown) rendering of the note. [Example](https://jott.live/texdown/note/test)
+- `/code/<note-name>` will syntax highlight the note.
+- `/edit/note/<note-name>` will open a basic editor for the note.
+
 
 ## Installation
 Although you can use https://jott.live to test out this project, do not rely on it for anything important.
