@@ -51,9 +51,11 @@ button:hover{
     top: 20px;
     bottom: 0;
     left: 0;
-    right: 0;
+    right: 50%;
     margin:0;
     padding:5px;
+    background: rgb(63, 63, 63);
+    color: rgb(220, 220, 220);
 }
 #note {
     height: 100%;
@@ -63,22 +65,46 @@ button:hover{
     border: none;
     font-family: 'Inconsolata', monospace;
 }
+#note-output {
+    position: absolute;
+    top: 20px;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    margin:0;
+    padding:5px;
+}
 .dimmed {
     color: #eee;
 }
 textarea, input {
     font-family: 'Inconsolata', monospace;
 }
+pre {
+    font-family: 'Inconsolata', monospace;
+}
+.center {
+    text-align: center;
+}
 
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/codemirror.min.js"></script>
+<script src=" https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/mode/markdown/markdown.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/theme/zenburn.min.css">
 <style>
 .CodeMirror {
     height: 100%;
     font-family: 'Inconsolata', monospace;
 }
 </style>
+<script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+<script src="/static/texdown.js"></script>
 <script>
 
 let code_mirror = null;
@@ -104,7 +130,7 @@ function save_note(button, textarea, input) {
                 alert("Error: " + httpRequest.response);
             } else {
                 var newurl = window.location.origin +
-                    '/edit/note/' +
+                    '/edit/texdown/' +
                     name;
                 window.history.pushState(
                     { path: newurl }, 
@@ -135,9 +161,34 @@ function save_note(button, textarea, input) {
     );
 }
 
+function render(contents, target) {
+    let renderer = new Renderer();
+    texDown(contents, renderer);
+    target.innerHTML = renderer.res;
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+}
+
 window.addEventListener('load', function() {
-    code_mirror = CodeMirror.fromTextArea(document.getElementById('note'));
+    code_mirror = CodeMirror.fromTextArea(document.getElementById('note'),
+        {
+            mode:  "markdown",
+            theme:  "zenburn",
+        });
+    render(code_mirror.doc.getValue(),
+        document.getElementById('note-output'));
+    let timeout = null;
+    code_mirror.on("change", function(){
+        if (timeout) {
+            clearTimeout(timeout);
+        }
+        timeout = setTimeout(function() {
+            render(code_mirror.doc.getValue(),
+                document.getElementById('note-output'));
+            timeout = null;
+        }, 500);
+    });
 });
+
 
 </script>
 </head>
@@ -154,6 +205,8 @@ window.addEventListener('load', function() {
 <div id="note-container">
 <textarea id="note" placeholder="note">{{ note }}</textarea>
 </div>
+<div id="note-output"></div>
 
 </body>
 </html>
+

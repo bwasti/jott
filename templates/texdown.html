@@ -9,46 +9,46 @@
 <style>
 
 html, body {
-	margin: 0;
-	padding: 0;
-	font-family: 'Inconsolata', monospace;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inconsolata', monospace;
 }
 body {
-	padding: 10px;
+    padding: 10px;
 }
 #name {
-	width: 100%;
-	font-weight: bold;
+    width: 100%;
+    font-weight: bold;
 }
 pre {
-	font-family: 'Inconsolata', monospace;
+    font-family: 'Inconsolata', monospace;
 }
 .center {
-	text-align: center;
+    text-align: center;
 }
 </style>
 
 <script type="text/x-mathjax-config">
-	  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
 </script>
 <script type="text/javascript" async
-	  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
 <script src="/static/texdown.js"></script>
 <script>
 
 // A series of rendering passes
 function render(elem) {
-	let contents = elem.textContent;
-	let renderer = new Renderer();
-	texDown(contents, renderer);
-	let new_elem = document.createElement('div');
-	new_elem.innerHTML = renderer.res;
-	elem.parentNode.replaceChild(new_elem, elem);
+    let contents = elem.textContent;
+    let renderer = new Renderer();
+    texDown(contents, renderer);
+    let new_elem = document.createElement('div');
+    new_elem.innerHTML = renderer.res;
+    elem.parentNode.replaceChild(new_elem, elem);
 }
 
 window.addEventListener('load', function() {
-	render(document.getElementById('note-container'));
+    render(document.getElementById('note-container'));
 });
 
 </script>

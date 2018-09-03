@@ -9,19 +9,19 @@
 <style>
 
 html, body {
-	margin: 0;
-	padding: 0;
-	font-family: 'Inconsolata', monospace;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inconsolata', monospace;
 }
 body {
-	padding: 5px;
+    padding: 5px;
 }
 #name {
-	width: 100%;
-	font-weight: bold;
+    width: 100%;
+    font-weight: bold;
 }
 pre {
-	font-family: 'Inconsolata', monospace;
+    font-family: 'Inconsolata', monospace;
 }
 </style>
 
@@ -29,36 +29,36 @@ pre {
 
 // A series of rendering passes
 function render(elem) {
-	let contents = [elem.textContent];
-	let contents_copy;
+    let contents = [elem.textContent];
+    let contents_copy;
 
-	// Pass to inject <br>s and convert strings to spans
-	contents_copy = contents;
-	contents = [];
-	for (let el of contents_copy) {
-		if (typeof el == "string") {
-			let arr = el.split('\n');
-			for (let s of arr) {
-				let span = document.createElement('span');
-				span.textContent = s;
-				contents.push(span);
-				contents.push(document.createElement('br'));
-			}
-		} else {
-			contents.push(el);
-		}
-	}
+    // Pass to inject <br>s and convert strings to spans
+    contents_copy = contents;
+    contents = [];
+    for (let el of contents_copy) {
+        if (typeof el == "string") {
+            let arr = el.split('\n');
+            for (let s of arr) {
+                let span = document.createElement('span');
+                span.textContent = s;
+                contents.push(span);
+                contents.push(document.createElement('br'));
+            }
+        } else {
+            contents.push(el);
+        }
+    }
 
-	// Final pass to add to new_elem
-	let new_elem = document.createElement('div');
-	for (let el of contents) {
-		new_elem.appendChild(el);
-	}
-	elem.parentNode.replaceChild(new_elem, elem);
+    // Final pass to add to new_elem
+    let new_elem = document.createElement('div');
+    for (let el of contents) {
+        new_elem.appendChild(el);
+    }
+    elem.parentNode.replaceChild(new_elem, elem);
 }
 
 window.addEventListener('load', function() {
-	render(document.getElementById('note-container'));
+    render(document.getElementById('note-container'));
 });
 
 </script>

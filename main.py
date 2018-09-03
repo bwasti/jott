@@ -33,10 +33,7 @@ def index():
     return render_template("index.html", count=count)
 
 
-@app.route("/edit/note/")
-@app.route("/edit/note/<name>")
-def edit_note(name=None):
-    name = name if name else ""
+def edit_impl(name, template):
     note = ""
     if name:
         conn = get_db("notes")
@@ -44,7 +41,19 @@ def edit_note(name=None):
         c.execute("SELECT note FROM notes WHERE name=?", (name,))
         result = c.fetchone()
         note = result[0] if result else ""
-    return render_template("edit.html", name=name, note=note)
+    return render_template(template, name=name, note=note)
+
+
+@app.route("/edit/note/")
+@app.route("/edit/note/<name>")
+def edit_note(name=""):
+    return edit_impl(name, "edit.html")
+
+
+@app.route("/edit/texdown/")
+@app.route("/edit/texdown/<name>")
+def edit_texdown(name=""):
+    return edit_impl(name, "edit_texdown.html")
 
 
 # Used by both save_note and save_raw
@@ -113,7 +122,7 @@ def save_note_impl(name, note, key):
     )
 
     conn.commit()
-    return 'https://jott.live/note/{}\n'.format(name)
+    return "https://jott.live/note/{}\n".format(name)
 
 
 @app.route("/save/raw/<name>/", methods=["POST"])
