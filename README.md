@@ -29,9 +29,8 @@ Success! Note "my_test_note" deleted
 
 ### Website
 
-Navigate to the site and set a title in the 'name' field.  To set a key for editing the note, use
-'name#key' in that field.
-
+- `/edit/node/` will create a blank note.
+- `/edit/node/<note-name>` will edit an existing note.
 - `/note/<note-name>` will return the default HTML rendering of the note.
 - `/raw/<note-name>` will return the note as raw text. (Useful with wget/curl.)
 - `/texdown/<note-name>` will return a minimal [TeXDown](https://github.com/tex-ninja/texdown#texdown) rendering of the note. [Example](https://jott.live/texdown/note/test)
