@@ -242,8 +242,9 @@ def stats():
 
     c.execute(
         """
-        SELECT path, SUM(count) as sum 
+        SELECT path, COUNT(DISTINCT ip) as sum
         FROM visits
+        WHERE path NOT LIKE '/save/%'
         GROUP BY path
         ORDER BY sum DESC
         """
