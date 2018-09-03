@@ -10,7 +10,7 @@ Use `curl` directly for quick uploading.
 $ echo "test" | curl -F 'note=<-' https://jott.live/save/raw/<note-name>/
 ```
 
-The `jott` script in `jott/scripts` makes it easy to upload and read notes from the command line.
+Alternatively, the `jott` script in `jott/scripts` makes it easier to upload and read notes.
 
 To install the script without downloading the repo:
 ```
