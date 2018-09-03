@@ -22,6 +22,17 @@ body {
 	<h2>Welcome to jott.live</h2>
 	<br>
 	Use this site to make <a href="/edit/note/">notes<a>.
-	{{count}} notes made so far.
+    {{count}} notes made so far.
+    <br/>
+    <p>
+        Working with notes: 
+        <ul>
+            <li>`/note/<note-name>` will return the default HTML rendering of a note</li>
+            <li>`/texdown/note/<note-name>` will return a minimal TeXDown rendering of the note</li>
+            <li>`/raw/note/<note-name>` will return the raw note</li>
+            <li>`/edit/note/<note-name>` will open a basic editor for the note</li>
+        </ul>
+    </p>
+    
 </body>
 </html>
