@@ -47,16 +47,14 @@ def edit_note(name=None):
     return render_template("edit.html", name=name, note=note)
 
 
-@app.route("/save/note/<name>/", methods=["POST"])
-@app.route("/save/note/<name>/<key>", methods=["POST"])
-def save_note(name, key=""):
+# Used by both save_note and save_raw
+def save_note_impl(name, note, key):
     if len(name) > 99 or len(name) < 1:
         return "Note name length must be between 1 and 100 characters\n", 403
 
     if len(key) > 99:
         return "Note key length must be under 100 characters\n", 403
 
-    note = request.json["note"]
     if len(note) > 10000:
         return "Note length must be under 10K characters\n", 403
 
@@ -116,7 +114,21 @@ def save_note(name, key=""):
     )
 
     conn.commit()
-    return 'Success! Note "{}" saved\n'.format(name)
+    return 'https://jott.live/note/{}\n'.format(name)
+
+
+@app.route("/save/raw/<name>/", methods=["POST"])
+@app.route("/save/raw/<name>/<key>", methods=["POST"])
+def save_raw(name, key=""):
+    note = request.form["note"]
+    return save_note_impl(name, note, key)
+
+
+@app.route("/save/note/<name>/", methods=["POST"])
+@app.route("/save/note/<name>/<key>", methods=["POST"])
+def save_note(name, key=""):
+    note = request.json["note"]
+    return save_note_impl(name, note, key)
 
 
 @app.route("/delete/note/<name>/", methods=["GET"])
