@@ -17,7 +17,7 @@ Navigate to the site and set a title in the 'name' field.  To set a key for edit
 
 The `note` script in `jott/scripts` makes it easy to upload and read notes from the command line.
 
-(If you don't want to manually copy the script over: `$ curl https://jott.live/raw/note/note_script > note.sh && chmod +x note.sh && alias note='./note.sh'`).
+(To just install the script: `curl https://jott.live/raw/note/note_script > note.sh && chmod +x note.sh && alias note='./note.sh'`).
 
 Upload a note by piping through `stdin`, `note [note name] [password]`
 ```
