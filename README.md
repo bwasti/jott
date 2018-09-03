@@ -1,5 +1,5 @@
 # jott
-A minimal tool for writing quick notes.  Check out https://jott.live for a demo.
+A minimal tool for quickly writing and sharing notes.  Check out https://jott.live for a demo.
 
 ### Website
 
