@@ -156,6 +156,16 @@ def texdown_note(name):
     return render_template("texdown.html", name=name, note=note)
 
 
+@app.route("/code/note/<name>")
+def code_note(name):
+    conn = get_db("notes")
+    c = conn.cursor()
+    c.execute("SELECT note FROM notes WHERE name=?", (name,))
+    result = c.fetchone()
+    note = result[0] if result else ""
+    return render_template("code.html", name=name, note=note)
+
+
 @app.route("/raw/note/<name>")
 def raw_note(name):
     conn = get_db("notes")

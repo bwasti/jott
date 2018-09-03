@@ -5,6 +5,7 @@
 
 <link href="https://fonts.googleapis.com/css?family=inconsolata:400,700&amp;subset=latin-ext" rel="stylesheet">
 
+<title> jott - {{ name }} [edit] </title>
 <style>
 
 html, body {
@@ -111,7 +112,7 @@ function save_note(textarea, input) {
 
 <body>
 
-<input id="name" value="{{name}}" placeholder="name"/>
+<input id="name" value="{{name}}" placeholder="name#password"/>
 <button onclick="save_note(
 	document.getElementById('note'),
 	document.getElementById('name')

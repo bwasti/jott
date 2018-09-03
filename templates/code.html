@@ -12,9 +12,11 @@ html, body {
 	margin: 0;
 	padding: 0;
 	font-family: 'Inconsolata', monospace;
+	background: rgb(63, 63, 63);
+	color: rgb(220, 220, 220);
 }
 body {
-	padding: 10px;
+	padding: 5px;
 }
 #name {
 	width: 100%;
@@ -23,28 +25,16 @@ body {
 pre {
 	font-family: 'Inconsolata', monospace;
 }
-.center {
-	text-align: center;
-}
 </style>
 
-<script type="text/x-mathjax-config">
-	  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-</script>
-<script type="text/javascript" async
-	  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-<script src="/static/texdown.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
+<script>hljs.initHighlightingOnLoad();</script>
 <script>
 
 // A series of rendering passes
 function render(elem) {
 	let contents = elem.textContent;
-	let renderer = new Renderer();
-	texDown(contents, renderer);
-	let new_elem = document.createElement('div');
-	new_elem.innerHTML = renderer.res;
-	elem.parentNode.replaceChild(new_elem, elem);
 }
 
 window.addEventListener('load', function() {
@@ -56,8 +46,8 @@ window.addEventListener('load', function() {
 
 <body>
 
-<h1 id="name" class="center">{{ name }}</h1>
-<pre id="note-container">{{ note }}</pre>
+<h2 id="name">{{ name }}</h2>
+<pre id="note-container"><code>{{ note }}</code></pre>
 
 </body>
 </html>
