@@ -15,26 +15,26 @@ Navigate to the site and set a title in the 'name' field.  To set a key for edit
 
 ### Command line
 
-The `note` script in `jott/scripts` makes it easy to upload and read notes from the command line.
+The `jott` script in `jott/scripts` makes it easy to upload and read notes from the command line.
 
 To install the script without downloading the repo:
 ```
-$ curl https://jott.live/raw/note/note_script > note.sh && chmod +x note.sh && alias note='./note.sh'
+$ curl https://jott.live/raw/note/note_script > jott.sh && chmod +x jott.sh && alias jott='./jott.sh'
 ```
 
-Upload a note by piping through `stdin`, `note [note name] [password]`
+Upload a note by piping through `stdin`, `jott [note name] [password]`
 ```
-$ echo "this is a test" | note my_test_note secret_password
+$ echo "this is a test" | jott my_test_note secret_password
 Success! Note "my_test_note" saved
 ```
-Download a note with `note [note name]`
+Download a note with `jott [note name]`
 ```
-$ note my_test_note
+$ jott my_test_note
 this is a test
 ```
-Delete a note with `note -d [note name] [password]`
+Delete a note with `jott -d [note name] [password]`
 ```
-$ note -d my_test_note secret_password
+$ jott -d my_test_note secret_password
 Success! Note "my_test_note" deleted
 ```
 
