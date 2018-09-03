@@ -4,6 +4,12 @@ A minimal tool for quickly writing and sharing notes.  Check out https://jott.li
 
 ### Command line
 
+Use `curl` directly for quick uploading.
+
+```
+$ echo "test" | curl -F 'note=<-' https://jott.live/save/raw/<note-name>/
+```
+
 The `jott` script in `jott/scripts` makes it easy to upload and read notes from the command line.
 
 To install the script without downloading the repo:
