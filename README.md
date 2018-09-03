@@ -7,7 +7,7 @@ Navigate to the site and set a title in the 'name' field.  To set a key for edit
 'name#key' in that field.
 
 - `/note/<note-name>` will return the default HTML rendering of the note.
-- `/texdown/note/<note-name>` will return a minimal [TeXDown](https://github.com/tex-ninja/texdown#texdown) rendering of the note.
+- `/texdown/note/<note-name>` will return a minimal [TeXDown](https://github.com/tex-ninja/texdown#texdown) rendering of the note. [Example](https://jott.live/texdown/note/test)
 - `/raw/note/<note-name>` will return the raw note. (Useful for the command line.)
 - `/edit/note/<note-name>` will open a basic editor for the note.
 
