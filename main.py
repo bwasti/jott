@@ -83,7 +83,7 @@ def save_note(name, key=""):
         time_since = date - count_lookup[1]
         print(time_since)
         count = count_lookup[0] + 1
-        if time_since < 10:
+        if time_since < 5:
             return "Rate limit reached. Please try again later.\n", 403
     else:
         count = 1

@@ -63,12 +63,15 @@ button:hover{
 	border: none;
 	font-family: 'Inconsolata', monospace;
 }
+.dimmed {
+	color: #eee;
+}
 
 </style>
 
 <script>
 
-function save_note(textarea, input) {
+function save_note(button, textarea, input) {
 	let note = textarea.value;
 	let name_pass = input.value.split('#');
 	let name = encodeURIComponent(name_pass[0]);
@@ -93,6 +96,17 @@ function save_note(textarea, input) {
 					{ path: newurl }, 
 					'', 
 					newurl);
+				button.classList.toggle('dimmed', true);
+				button.onclick = function() {};
+				setTimeout(function(){
+					button.classList.toggle('dimmed', false);
+					button.onclick = function() {save_note(
+						this,
+						document.getElementById('note'),
+						document.getElementById('name')
+					)};
+
+				}, 5000);
 			}
 		}
 	};
@@ -114,6 +128,7 @@ function save_note(textarea, input) {
 
 <input id="name" value="{{name}}" placeholder="name#password"/>
 <button onclick="save_note(
+	this,
 	document.getElementById('note'),
 	document.getElementById('name')
 	)">save</button>
