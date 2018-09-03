@@ -29,8 +29,8 @@ Success! Note "my_test_note" deleted
 
 ### Website
 
-- `/edit/node/` will create a blank note.
-- `/edit/node/<note-name>` will edit an existing note.
+- `/edit/note/` will create a blank note.
+- `/edit/note/<note-name>` will edit an existing note.
 - `/note/<note-name>` will return the default HTML rendering of the note.
 - `/raw/<note-name>` will return the note as raw text. (Useful with wget/curl.)
 - `/texdown/<note-name>` will return a minimal [TeXDown](https://github.com/tex-ninja/texdown#texdown) rendering of the note. [Example](https://jott.live/texdown/note/test)
