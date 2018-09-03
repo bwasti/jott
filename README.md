@@ -1,5 +1,6 @@
 # jott
 A minimal tool for quickly writing and sharing notes.  Check out https://jott.live for a demo.
+![jott](https://jott.live/static/jott.png)
 
 ### Website
 
