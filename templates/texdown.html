@@ -2,52 +2,53 @@
 <meta name="viewport" content="width=device-width, user-scalable=no" />
 <head>
 <link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+<link rel="apple-touch-icon" href="/static/jott-icon.png">
 
 <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin-ext" rel="stylesheet">
 
+<title> jott - {{ name }} </title>
 <style>
 
 html, body {
-	margin: 0;
-	padding: 0;
-	font-family: 'Inconsolata', monospace;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inconsolata', monospace;
 }
 body {
-	padding: 10px;
+    padding: 10px;
 }
 #name {
-	width: 100%;
-	font-weight: bold;
+    width: 100%;
+    font-weight: bold;
 }
 pre {
-	font-family: 'Inconsolata', monospace;
+    font-family: 'Inconsolata', monospace;
 }
 .center {
-	text-align: center;
+    text-align: center;
 }
 </style>
 
 <script type="text/x-mathjax-config">
-	  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
 </script>
-<script type="text/javascript" async
-	  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
+<script src="/static/MathJax.js"></script>
 <script src="/static/texdown.js"></script>
 <script>
 
 // A series of rendering passes
 function render(elem) {
-	let contents = elem.textContent;
-	let renderer = new Renderer();
-	texDown(contents, renderer);
-	let new_elem = document.createElement('div');
-	new_elem.innerHTML = renderer.res;
-	elem.parentNode.replaceChild(new_elem, elem);
+    let contents = elem.textContent;
+    let renderer = new Renderer();
+    texDown(contents, renderer);
+    let new_elem = document.createElement('div');
+    new_elem.innerHTML = renderer.res;
+    elem.parentNode.replaceChild(new_elem, elem);
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 }
 
 window.addEventListener('load', function() {
-	render(document.getElementById('note-container'));
+    render(document.getElementById('note-container'));
 });
 
 </script>
@@ -55,7 +56,6 @@ window.addEventListener('load', function() {
 
 <body>
 
-<h1 id="name" class="center">{{ name }}</h1>
 <pre id="note-container">{{ note }}</pre>
 
 </body>

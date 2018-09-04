@@ -1,33 +1,48 @@
 # jott
 A minimal tool for quickly writing and sharing notes.  Check out https://jott.live for a demo.
-
-### Website
-
-Navigate to the site and set a title in the 'name' field.  To set a key for editing the note, use
-'name#key' in that field.
-
-- `/note/<note-name>` will return the default HTML rendering of the note.
-- `/texdown/note/<note-name>` will return a minimal [TeXDown](https://github.com/tex-ninja/texdown#texdown) rendering of the note. [Example](https://jott.live/texdown/note/test)
-- `/raw/note/<note-name>` will return the raw note. (Useful for the command line.)
-- `/edit/note/<note-name>` will open a basic editor for the note.
-
+![jott](https://jott.live/static/jott.png?)
 
 ### Command line
 
-The `note` script in `jott/scripts` makes it easy to upload and read notes from the command line.
+Use `curl` directly for quick uploading.
 
 ```
-$ echo "this is a test" | note my_test_note secret_password
+$ echo "test" | curl -F 'note=<-' https://jott.live/save/raw/<note-name>/
+```
+
+Alternatively, the `jott` script in `jott/scripts` makes it easier to upload and read notes.
+
+To install the script without downloading the repo:
+```
+$ curl https://jott.live/raw/note/note_script > jott.sh && chmod +x jott.sh && alias jott='./jott.sh'
+```
+
+Upload a note by piping through `stdin`, `jott [note name] [password]`
+```
+$ echo "this is a test" | jott my_test_note secret_password
 Success! Note "my_test_note" saved
-$ note my_test_note
+```
+Download a note with `jott [note name]`
+```
+$ jott my_test_note
 this is a test
-$ echo "updating without the key" | note my_test_note
-Note already saved with different key
-$ note my_test_note
-this is a test
-$ note -d my_test_note secret_password
+```
+Delete a note with `jott -d [note name] [password]`
+```
+$ jott -d my_test_note secret_password
 Success! Note "my_test_note" deleted
 ```
+
+### Website
+
+- `/edit/note/` will create a blank note.
+- `/edit/note/<note-name>` will edit an existing note.
+- `/note/<note-name>` will return the default HTML rendering of the note.
+- `/raw/<note-name>` will return the note as raw text. (Useful with wget/curl.)
+- `/texdown/<note-name>` will return a minimal [TeXDown](https://github.com/tex-ninja/texdown#texdown) rendering of the note. [Example](https://jott.live/texdown/note/test)
+- `/code/<note-name>` will syntax highlight the note.
+- `/edit/note/<note-name>` will open a basic editor for the note.
+
 
 ## Installation
 Although you can use https://jott.live to test out this project, do not rely on it for anything important.

@@ -13,6 +13,8 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: 'Inconsolata', monospace;
+    background: rgb(63, 63, 63);
+    color: rgb(220, 220, 220);
 }
 body {
     padding: 5px;
@@ -26,36 +28,14 @@ pre {
 }
 </style>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/zenburn.min.css" rel="stylesheet">
+<script>hljs.initHighlightingOnLoad();</script>
 <script>
 
 // A series of rendering passes
 function render(elem) {
-    let contents = [elem.textContent];
-    let contents_copy;
-
-    // Pass to inject <br>s and convert strings to spans
-    contents_copy = contents;
-    contents = [];
-    for (let el of contents_copy) {
-        if (typeof el == "string") {
-            let arr = el.split('\n');
-            for (let s of arr) {
-                let span = document.createElement('span');
-                span.textContent = s;
-                contents.push(span);
-                contents.push(document.createElement('br'));
-            }
-        } else {
-            contents.push(el);
-        }
-    }
-
-    // Final pass to add to new_elem
-    let new_elem = document.createElement('div');
-    for (let el of contents) {
-        new_elem.appendChild(el);
-    }
-    elem.parentNode.replaceChild(new_elem, elem);
+    let contents = elem.textContent;
 }
 
 window.addEventListener('load', function() {
@@ -68,8 +48,9 @@ window.addEventListener('load', function() {
 <body>
 
 <h2 id="name">{{ name }}</h2>
-<pre id="note-container">{{ note }}</pre>
+<pre id="note-container"><code>{{ note }}</code></pre>
 
 </body>
 </html>
+
 

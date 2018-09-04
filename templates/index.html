@@ -2,37 +2,64 @@
 <meta name="viewport" content="width=device-width, user-scalable=no" />
 <head>
 <link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+<link rel="apple-touch-icon" href="/static/jott-icon.png">
 
 <link href="https://fonts.googleapis.com/css?family=Inconsolata:400,700&amp;subset=latin-ext" rel="stylesheet">
 
+<title> jott </title>
 <style>
 
 html, body {
-	margin: 0;
-	padding: 0;
-	font-family: 'Inconsolata', monospace;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inconsolata', monospace;
 }
 body {
-	padding: 5px;
+    padding: 10px;
+}
+img {
+    height: 200px;
 }
 </style>
 </head>
 
 <body>
-	<h2>Welcome to jott.live</h2>
-	<br>
-	Use this site to make <a href="/edit/note/">notes<a>.
+    <h2>Welcome to jott.live</h2>
+    <br>
+    Use this site to make <a href="/edit/note/">simple notes</a>
+    (or <a href="/edit/texdown/">TeXdown notes</a>).
     {{count}} notes made so far.
-    <br/>
-    <p>
-        Working with notes: 
-        <ul>
-            <li>`/note/<note-name>` will return the default HTML rendering of a note</li>
-            <li>`/texdown/note/<note-name>` will return a minimal TeXDown rendering of the note</li>
-            <li>`/raw/note/<note-name>` will return the raw note</li>
-            <li>`/edit/note/<note-name>` will open a basic editor for the note</li>
-        </ul>
-    </p>
-    
+    <br>
+    <br>
+    <h4> Command line usage </h4>
+    <code>
+    $ curl https://jott.live/raw/note/note_script > jott && chmod +x jott
+    <br>
+    $ echo "note contents" | jott &lt;name&gt; &lt;password&gt;
+    <br>
+    $ jott &lt;name&gt;
+    <br>
+    note contents
+    </code>
+    <br>
+    <br>
+    <h4> Web </h4>
+    Find a saved note at
+    <code>https://jott.live/note/&lt;name&gt;</code>
+    <br>
+    For code syntax highlighting
+    <code>https://jott.live/code/&lt;name&gt;</code>
+    <br>
+    For TeXdown rendering
+    <code>https://jott.live/texdown/&lt;name&gt;</code>
+    <br>
+    Source and documentation can be found <a href="https://github.com/bwasti/jott">here</a>.
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <img src="/static/jott.png" alt="jott"> 
 </body>
 </html>
