@@ -43,6 +43,7 @@ function render(elem) {
     let new_elem = document.createElement('div');
     new_elem.innerHTML = renderer.res;
     elem.parentNode.replaceChild(new_elem, elem);
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 }
 
 window.addEventListener('load', function() {
