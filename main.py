@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, g, abort, redirect, url_for
 import sqlite3
 import time
+from textwrap import dedent
 
 app = Flask(__name__)
 
@@ -219,11 +220,16 @@ def raw_note(name):
 def track():
     ip = get_ip()
     path = request.full_path
+
     if path[-1] == "?":
         path = path[:-1]
 
+    referrer = request.referrer
+
     conn = get_db("notes")
     c = conn.cursor()
+
+    # Update ip -> path stats
     c.execute("SELECT count FROM visits WHERE ip=? AND path=?", (ip, path))
     result = c.fetchone()
     if result:
@@ -236,13 +242,28 @@ def track():
             """,
             (ip, path, count),
         )
-
     c.execute(
         """
         UPDATE visits SET count=? WHERE ip=? AND path=?
         """,
         (count, ip, path),
     )
+
+    # Update referrer -> path stats
+    c.execute(
+        """
+        SELECT COUNT(*) FROM referrals
+        WHERE referrer=? AND ip=? AND path=?
+        """,
+        (referrer, ip, path)
+    )
+    if c.fetchone()[0] == 0:
+        c.execute(
+            """
+            INSERT INTO referrals VALUES (?, ?, ?)
+            """,
+            (referrer, ip, path)
+        )
     conn.commit()
 
 
@@ -262,6 +283,7 @@ def stats():
     result = c.fetchone()
     visit_count = result[0] if result else 0
 
+    # Top most visited paths
     c.execute(
         """
         SELECT path, COUNT(DISTINCT ip) as sum
@@ -272,18 +294,47 @@ def stats():
         """
     )
     top_paths = []
-
     for i in range(5):
         result = c.fetchone()
         if result:
             top_paths.append(result)
     top_paths_str = "\n".join(
-        ["{}: {}".format(path, count) for path, count in top_paths]
+        ["  {}: {}".format(path, count) for path, count in top_paths]
     )
 
-    return "{} visitors\n{} notes\n{} authors\n{}\n".format(
-        visit_count, note_count, author_count, top_paths_str
+    # Top referrers
+    c.execute(
+        """
+        SELECT referrer, COUNT(DISTINCT ip) as sum
+        FROM referrals
+        GROUP BY referrer
+        ORDER BY sum DESC
+        """
     )
+    top_referrers = []
+    for i in range(5):
+        result = c.fetchone()
+        if result:
+            top_referrers.append(result)
+    top_referrers_str = "\n".join(
+        ["  {}: {}".format(referrer, count) for referrer, count in top_referrers]
+    )
+
+    return dedent("""
+        visitors: {}
+        notes: {}
+        authors: {}
+        top paths:
+        {}
+        top referrers:
+        {}
+        """).format(
+        visit_count,
+        note_count,
+        author_count,
+        top_paths_str,
+        top_referrers_str
+        )
 
 
 @app.before_first_request
@@ -302,6 +353,11 @@ def initialize_dbs():
     db.execute(
         """
         CREATE TABLE IF NOT EXISTS visits (ip text, path text, count integer)
+        """
+    )
+    db.execute(
+        """
+        CREATE TABLE IF NOT EXISTS referrals (referrer text, ip text, path text)
         """
     )
     db.commit()
