@@ -224,7 +224,7 @@ def track():
     if path[-1] == "?":
         path = path[:-1]
 
-    referrer = request.referrer
+    referrer = request.referrer if request.referrer else "None"
 
     conn = get_db("notes")
     c = conn.cursor()
@@ -257,7 +257,8 @@ def track():
         """,
         (referrer, ip, path),
     )
-    if c.fetchone()[0] == 0:
+    result = c.fetchone()
+    if result[0] == 0:
         c.execute(
             """
             INSERT INTO referrals VALUES (?, ?, ?)
