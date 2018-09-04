@@ -255,14 +255,14 @@ def track():
         SELECT COUNT(*) FROM referrals
         WHERE referrer=? AND ip=? AND path=?
         """,
-        (referrer, ip, path)
+        (referrer, ip, path),
     )
     if c.fetchone()[0] == 0:
         c.execute(
             """
             INSERT INTO referrals VALUES (?, ?, ?)
             """,
-            (referrer, ip, path)
+            (referrer, ip, path),
         )
     conn.commit()
 
@@ -320,7 +320,8 @@ def stats():
         ["  {}: {}".format(referrer, count) for referrer, count in top_referrers]
     )
 
-    return dedent("""
+    return dedent(
+        """\
         visitors: {}
         notes: {}
         authors: {}
@@ -328,13 +329,8 @@ def stats():
         {}
         top referrers:
         {}
-        """).format(
-        visit_count,
-        note_count,
-        author_count,
-        top_paths_str,
-        top_referrers_str
-        )
+        """
+    ).format(visit_count, note_count, author_count, top_paths_str, top_referrers_str)
 
 
 @app.before_first_request
