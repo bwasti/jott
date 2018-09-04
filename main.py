@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, g, abort
+from flask import Flask, render_template, request, g, abort, redirect, url_for
 import sqlite3
 import time
 
@@ -50,10 +50,24 @@ def edit_note(name=""):
     return edit_impl(name, "edit.html")
 
 
+@app.route("/edit")
+@app.route("/edit/")
+@app.route("/note")
+@app.route("/note/")
+def redirect_note():
+    return redirect(url_for("edit_note", _external=True))
+
+
 @app.route("/edit/texdown/")
 @app.route("/edit/texdown/<name>")
 def edit_texdown(name=""):
     return edit_impl(name, "edit_texdown.html")
+
+
+@app.route("/texdown")
+@app.route("/texdown/")
+def redirect_texdown():
+    return redirect(url_for("edit_texdown", _external=True))
 
 
 # Used by both save_note and save_raw
