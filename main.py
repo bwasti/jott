@@ -140,17 +140,20 @@ def save_note_impl(name, note, key):
     return "https://jott.live/note/{}\n".format(name)
 
 
+@app.route("/save/<name>", methods=["POST"])
+@app.route("/save/<name>/", methods=["POST"])
+@app.route("/save/<name>/<key>", methods=["POST"])
 @app.route("/save/raw/<name>/", methods=["POST"])
 @app.route("/save/raw/<name>/<key>", methods=["POST"])
-def save_raw(name, key=""):
-    note = request.form["note"]
-    return save_note_impl(name, note, key)
-
-
 @app.route("/save/note/<name>/", methods=["POST"])
 @app.route("/save/note/<name>/<key>", methods=["POST"])
-def save_note(name, key=""):
-    note = request.json["note"]
+def save(name, key=""):
+    if request.json:
+        note = request.json["note"]
+    elif request.form:
+        note = request.form["note"]
+    else:
+        return "Invalid payload\n", 403
     return save_note_impl(name, note, key)
 
 
@@ -313,7 +316,7 @@ def stats():
         """
     )
     top_referrers = []
-    for i in range(5):
+    for i in range(10):
         result = c.fetchone()
         if result:
             top_referrers.append(result)
