@@ -111,14 +111,14 @@ function render_impl(contents, target) {
   }
   __interval = setInterval(function() {
     try {
-			__ctx.clearRect(0, 0, canvas.width, canvas.height);
-			loop(__ctx, __i++);
+      __ctx.clearRect(0, 0, canvas.width, canvas.height);
+      loop(__ctx, __i++);
     } catch(e) {
       clearInterval(__interval);
       render_error(e);
     }
     if (__i >= __iters) {
-			__i = 0;
+      __i = 0;
     }
   }, 1000 / __framerate);
 }
@@ -165,10 +165,10 @@ window.addEventListener('load', function() {
       theme:  "zenburn",
     });
 
-	let savedContents = localStorage.getItem("saved");
-	if (savedContents) {
-		code_mirror.doc.setValue(savedContents);
-	}
+  let savedContents = localStorage.getItem("saved");
+  if (savedContents) {
+    code_mirror.doc.setValue(savedContents);
+  }
   render();
 
   let timeout = null;
@@ -177,8 +177,8 @@ window.addEventListener('load', function() {
       clearTimeout(timeout);
     }
     timeout = setTimeout(function() {
-			let contents = code_mirror.doc.getValue();
-			localStorage.setItem("saved", contents);
+      let contents = code_mirror.doc.getValue();
+      localStorage.setItem("saved", contents);
       render();
       timeout = null;
     }, 500);

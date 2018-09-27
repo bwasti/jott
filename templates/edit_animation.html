@@ -104,6 +104,10 @@ pre {
       MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
 </script>
 <script src="/static/MathJax.js"></script>
+
+{% if note %}
+<script>localStorage.setItem("saved", "");</script>
+{% endif %}
 <script src="/static/edit_animation.js"> </script>
 </head>
 
@@ -117,12 +121,10 @@ pre {
     )">save</button>
 <br>
 <div id="note-container">
-<textarea id="note" placeholder="note">{% if note %} {{ note }} 
-	{% else %}
+<textarea id="note" placeholder="note">{% if note %}{{ note }}{% else %}
 function loop(ctx, frame) {
   // Do something here
-}
-	{% endif %}
+}{% endif %}
 </textarea>
 </div>
 <div id="note-output">
