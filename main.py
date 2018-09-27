@@ -64,6 +64,11 @@ def redirect_note():
 def edit_texdown(name=""):
     return edit_impl(name, "edit_texdown.html")
 
+@app.route("/edit/animation/")
+@app.route("/edit/animation/<name>")
+def edit_animation(name=""):
+    return edit_impl(name, "edit_animation.html")
+
 
 @app.route("/texdown")
 @app.route("/texdown/")
@@ -292,13 +297,15 @@ def stats():
         """
         SELECT path, COUNT(DISTINCT ip) as sum
         FROM visits
-        WHERE path NOT LIKE '/save/%'
+        WHERE 
+            path NOT LIKE '/save/%' AND
+            path NOT LIKE '/static/%'
         GROUP BY path
         ORDER BY sum DESC
         """
     )
     top_paths = []
-    for i in range(5):
+    for i in range(10):
         result = c.fetchone()
         if result:
             top_paths.append(result)
@@ -319,6 +326,8 @@ def stats():
     for i in range(10):
         result = c.fetchone()
         if result:
+            if str(result[0]) == 'None':
+                continue
             top_referrers.append(result)
     top_referrers_str = "\n".join(
         ["  {}: {}".format(referrer, count) for referrer, count in top_referrers]

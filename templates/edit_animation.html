@@ -1,0 +1,142 @@
+<html>
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+<head>
+<link rel="icon" href="/static/favicon.ico" type="image/x-icon"/>
+<link rel="apple-touch-icon" href="/static/jott-icon.png">
+
+<link href="https://fonts.googleapis.com/css?family=inconsolata:400,700&amp;subset=latin-ext" rel="stylesheet">
+
+<title> jott - {{ name }} [edit] </title>
+<style>
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inconsolata', monospace;
+}
+body {
+    position: relative;
+    height: 100%;
+}
+#name {
+    position: absolute;
+    height: 20px;
+    width: 85%;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    padding-left: 5px;
+    border: none;
+    background: #eee;
+    font-family: 'Inconsolata', monospace;
+    font-weight: bold;
+}
+button {
+    position: absolute;
+    height: 20px;
+    width: 15%;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: #eee;
+    font-family: 'Inconsolata', monospace;
+    font-weight: bold;
+}
+button:hover{
+    background: #aaa;
+    cursor:pointer;
+}
+#note-container {
+    position: absolute;
+    top: 20px;
+    bottom: 0;
+    left: 0;
+    right: 50%;
+    margin:0;
+    padding:5px;
+    background: rgb(63, 63, 63);
+    color: rgb(220, 220, 220);
+}
+#note {
+    height: 100%;
+    width: 100%;
+    margin:0;
+    padding:0;
+    border: none;
+    font-family: 'Inconsolata', monospace;
+}
+#note-output {
+    position: absolute;
+    top: 20px;
+    bottom: 0;
+    left: 50%;
+    right: 0;
+    margin: 0;
+    padding: 10px;
+    overflow: scroll;
+}
+.dimmed {
+    color: #eee;
+}
+textarea, input {
+    font-family: 'Inconsolata', monospace;
+}
+pre {
+    font-family: 'Inconsolata', monospace;
+}
+.center {
+    text-align: center;
+}
+
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/codemirror.min.js"></script>
+<script src=" https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/mode/javascript/javascript.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/codemirror.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/theme/zenburn.min.css">
+<style>
+.CodeMirror {
+    height: 100%;
+    font-family: 'Inconsolata', monospace;
+}
+</style>
+<script type="text/x-mathjax-config">
+      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script src="/static/MathJax.js"></script>
+<script src="/static/edit_animation.js"> </script>
+</head>
+
+<body>
+
+<input id="name" value="{{name}}" placeholder="name#password"/>
+<button onclick="save_note(
+    this,
+    document.getElementById('note'),
+    document.getElementById('name')
+    )">save</button>
+<br>
+<div id="note-container">
+<textarea id="note" placeholder="note">{% if note %} {{ note }} 
+	{% else %}
+function loop(ctx, frame) {
+  // Do something here
+}
+	{% endif %}
+</textarea>
+</div>
+<div id="note-output">
+	<pre><code id="error"></code></pre>
+	<canvas id="canvas" height=200 width=300></canvas><br>
+	<br>
+	<input value="30" id="framerate" onchange="updateFramerate(this)"> frame rate
+	<br>
+	<input id="frames" value="100" onchange="updateNumFrames(this)"> number of frames
+	<br>
+	<input id="height" value="200" onchange="updateHeight(this)"> height
+	<br>
+	<input id="width" value="300" onchange="updateWidth(this)"> width
+</div>
+</body>
+</html>
+
