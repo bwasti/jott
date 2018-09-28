@@ -58,6 +58,7 @@ let __num_frames = 100;
 let __framerate = 20;
 let __width = 300;
 let __height = 200;
+let __background_color = 'white';
 
 function updateFramerate(target) {
   __framerate = Number.parseInt(target.value);
@@ -83,7 +84,8 @@ function render_error(err, target) {
   let errDiv = document.getElementById('error');
   errDiv.textContent = err + '\n\n' + err.stack;
 }
-function render_impl(contents, target) {
+
+function render_impl(contents, target, capturer = null) {
   document.getElementById('error').textContent = '';
   document.getElementById('framerate').value = __framerate;
   document.getElementById('frames').value = __num_frames;
@@ -109,15 +111,30 @@ function render_impl(contents, target) {
   if (__interval) {
       clearInterval(__interval);
   }
+  let capture = false;
+  if (capturer) {
+    capture = true;
+  }
   __interval = setInterval(function() {
     try {
       __ctx.clearRect(0, 0, canvas.width, canvas.height);
+      __ctx.fillStyle = __background_color;
+      __ctx.fillRect(0, 0, canvas.width, canvas.height);
       loop(__ctx, __i++);
+      if (capture) {
+        capturer.addFrame(__ctx, {copy:true, delay:20});
+        let info = document.getElementById('info');
+        info.textContent = 'Recording... ' + Math.floor(100 * __i/__iters) + '%';
+      }
     } catch(e) {
       clearInterval(__interval);
       render_error(e);
     }
     if (__i >= __iters) {
+      if (capture) {
+        capturer.render();
+        capture = false;
+      }
       __i = 0;
     }
   }, 1000 / __framerate);
@@ -126,6 +143,30 @@ function render_impl(contents, target) {
 function render() {
   render_impl(code_mirror.doc.getValue(),
     document.getElementById('note-output'));
+}
+
+function capture(button) {
+  let capturer = new GIF({
+    workerScript: '/static/gif.worker.js',
+    workers: 4,
+    quality: 1,
+    height: __height,
+    width: __width
+  });
+
+  let info = document.getElementById('info');
+  capturer.on('progress', function(p) {
+    info.textContent = 'Rendering... ' + Math.floor(100 * p) + '%';
+  });
+  capturer.on('finished', function(blob) {
+    let img = document.getElementById('output');
+    img.src = URL.createObjectURL(blob);
+    info.textContent = 'Right click to download'
+  });
+
+  render_impl(code_mirror.doc.getValue(),
+    document.getElementById('note-output'),
+    capturer);
 }
 
 function drawPoint(ctx, x, y, options={}) {

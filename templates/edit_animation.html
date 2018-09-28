@@ -32,16 +32,18 @@ body {
     font-weight: bold;
 }
 button {
-    position: absolute;
     height: 20px;
-    width: 15%;
-    right: 0;
     margin: 0;
-    padding: 0;
     border: none;
     background: #eee;
     font-family: 'Inconsolata', monospace;
     font-weight: bold;
+}
+button#save {
+    padding: 0;
+    position: absolute;
+    right: 0;
+    width: 15%;
 }
 button:hover{
     background: #aaa;
@@ -94,16 +96,13 @@ pre {
 <script src=" https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/mode/javascript/javascript.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/codemirror.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.40.0/theme/zenburn.min.css">
+<script src="/static/gif.js"></script>
 <style>
 .CodeMirror {
     height: 100%;
     font-family: 'Inconsolata', monospace;
 }
 </style>
-<script type="text/x-mathjax-config">
-      MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
-</script>
-<script src="/static/MathJax.js"></script>
 
 {% if note %}
 <script>localStorage.setItem("saved", "");</script>
@@ -118,7 +117,7 @@ pre {
     this,
     document.getElementById('note'),
     document.getElementById('name')
-    )">save</button>
+    )" id="save">save</button>
 <br>
 <div id="note-container">
 <textarea id="note" placeholder="note">{% if note %}{{ note }}{% else %}
@@ -138,6 +137,13 @@ function loop(ctx, frame) {
 	<input id="height" value="200" onchange="updateHeight(this)"> height
 	<br>
 	<input id="width" value="300" onchange="updateWidth(this)"> width
+	<br>
+	<br>
+	<button onclick="capture(this)"> convert to gif </button>
+	<br>
+	<img id="output"></img>
+	<br>
+	<div id="info"></div>
 </div>
 </body>
 </html>
