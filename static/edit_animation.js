@@ -122,7 +122,7 @@ function render_impl(contents, target, capturer = null) {
       __ctx.fillRect(0, 0, canvas.width, canvas.height);
       loop(__ctx, __i++);
       if (capture) {
-        capturer.addFrame(__ctx, {copy:true, delay:20});
+        capturer.addFrame(__ctx, {copy:true, delay: 1000/__framerate});
         let info = document.getElementById('info');
         info.textContent = 'Recording... ' + Math.floor(100 * __i/__iters) + '%';
       }
@@ -151,7 +151,7 @@ function capture(button) {
     workers: 4,
     quality: 1,
     height: __height,
-    width: __width
+    width: __width,
   });
 
   let info = document.getElementById('info');
